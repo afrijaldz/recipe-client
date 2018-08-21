@@ -1,11 +1,19 @@
 import React, { Component } from 'react'
+import axios from 'axios'
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      data: []
+      data: [],
+      form: {
+        name: '',
+      }
     }
+
+    this.submit = this.submit.bind(this)
+    this.handleForm = this.handleForm.bind(this)
+    this.getData = this.getData.bind(this)
   }
 
   componentDidMount() {
@@ -39,9 +47,26 @@ class App extends Component {
     }
   }
 
+  handleForm(e) {
+    const form = {...this.state.form}
+    form.name = e.target.value
+    this.setState({ form })
+  }
+
+  submit(e) {
+    e.preventDefault()
+    axios.post('http://localhost:3000', this.state.form).then(data => {
+      this.getData()
+    }).catch(err => console.log(err))
+  }
+
   render() {
     return (
       <div>
+        <form onSubmit={this.submit}>
+          <input name={this.state.form.name} onChange={this.handleForm} value={this.state.form.name} placeholder="Input the name" />
+          <button>Add the recipe </button>
+        </form>
         <ul>
           {this.state.data.map((data, i) => (
             <li key={i}>
