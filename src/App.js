@@ -26,14 +26,17 @@ class App extends Component {
       })
   }
 
-  delete(id) {
-    fetch(`http://localhost:3000/${id}`, {
-      method: 'delete',
-    }).then(() => {
-      this.getData()
-    }).catch(error => {
-      console.log(error)
-    });
+  delete(data) {
+    const verify = window.confirm(`Do you really want to delete ${data.name}?`)
+    if (verify) {
+      fetch(`http://localhost:3000/${data.id}`, {
+        method: 'delete',
+      }).then(() => {
+        this.getData()
+      }).catch(error => {
+        console.log(error)
+      });
+    }
   }
 
   render() {
@@ -42,7 +45,7 @@ class App extends Component {
         <ul>
           {this.state.data.map((data, i) => (
             <li key={i}>
-              {i+1} {data.name} <button onClick={() => this.delete(data.id)}>delete</button>
+              {i+1} {data.name} <button onClick={() => this.delete(data)}>delete</button>
             </li>
           ))}
         </ul>
